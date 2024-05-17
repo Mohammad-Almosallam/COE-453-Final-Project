@@ -104,11 +104,10 @@ const DataBlock = () => {
         <Table sx={{ minWidth: 650 }} aria-label="BMI data table">
           <TableHead>
             <TableRow>
-              <TableCell>{t("Dessert (100g serving)")}</TableCell>
-              <TableCell align="right">{t("id")}</TableCell>
+              <TableCell align="right">{t("home.id")}</TableCell>
               <TableCell align="right">{t("home.height")}</TableCell>
-              <TableCell align="right">{t("home.weight)")}</TableCell>
-              <TableCell align="right">{t("bmi")}</TableCell>
+              <TableCell align="right">{t("home.weight")}</TableCell>
+              <TableCell align="right">{t("home.bmi")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

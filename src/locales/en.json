@@ -10,6 +10,10 @@
     "rest": "REST",
     "weight": "Weight",
     "height": "Height",
-    "submit": "Calculate"
+    "submit": "Calculate",
+    "fillAllFields": "Fill all fields",
+    "bmi": "Body Mass Index",
+    "id": "ID",
+    "notFound": "Not found"
   }
 }
