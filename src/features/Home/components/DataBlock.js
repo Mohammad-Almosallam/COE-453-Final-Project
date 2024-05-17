@@ -7,13 +7,61 @@ import {
   FormControlLabel,
   Typography,
   Button,
+  TableCell,
+  TableRow,
+  TableBody,
+  TableHead,
+  Table,
+  TableContainer,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const DataBlock = () => {
   const { t } = useTranslation();
   const theme = useTheme();
+  const [data, setData] = useState([]);
+
+  const getBMIbyRest = () => {
+    fetch("https://restapi2-ji6zmiyasq-uc.a.run.app/getBMI")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch BMI data");
+        }
+        return response.json();
+      })
+      .then((jsonData) => {
+        setData(jsonData);
+      })
+      .catch((error) => {
+        console.error("Error fetching BMI data:", error);
+      });
+  };
+
+  const getBMIbyGraphQL = () => {
+    fetch("https://graphapi-ji6zmiyasq-uc.a.run.app/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: "{ getBMI }",
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch BMI data");
+        }
+        return response.json();
+      })
+      .then((jsonData) => {
+        const parsedData = JSON.parse(jsonData.data.getBMI);
+        setData(parsedData);
+      })
+      .catch((error) => {
+        console.error("Error fetching BMI data:", error);
+      });
+  };
 
   return (
     <Stack
@@ -35,7 +83,7 @@ const DataBlock = () => {
             borderRadius: theme.borderRadius.r10,
           }}
           onClick={() => {
-            // console.warn("hhh", formData);
+            getBMIbyGraphQL();
           }}
         >
           {t("home.fetchGraphql")}
@@ -46,12 +94,38 @@ const DataBlock = () => {
             borderRadius: theme.borderRadius.r10,
           }}
           onClick={() => {
-            // console.warn("hhh", formData);
+            getBMIbyRest();
           }}
         >
           {t("home.fetchREST")}
         </Button>
       </Stack>
+      <TableContainer>
+        <Table sx={{ minWidth: 650 }} aria-label="BMI data table">
+          <TableHead>
+            <TableRow>
+              <TableCell>{t("Dessert (100g serving)")}</TableCell>
+              <TableCell align="right">{t("id")}</TableCell>
+              <TableCell align="right">{t("home.height")}</TableCell>
+              <TableCell align="right">{t("home.weight)")}</TableCell>
+              <TableCell align="right">{t("bmi")}</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.id}</TableCell>
+                <TableCell align="right">{row.height}</TableCell>
+                <TableCell align="right">{row.weight}</TableCell>
+                <TableCell align="right">{row.bmi}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Stack>
   );
 };
