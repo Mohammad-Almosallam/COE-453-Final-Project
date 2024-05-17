@@ -6,6 +6,8 @@ import kfupm from "../../../assets/kfupm-logo.png";
 import { Trans, useTranslation } from "react-i18next";
 import Calculator from "../components/Calculator";
 import DataBlock from "../components/DataBlock";
+import { IoGlobe } from "react-icons/io5";
+import i18n from "../../../i18n";
 
 const Home = () => {
   const { t } = useTranslation();
@@ -33,6 +35,26 @@ const Home = () => {
         alt=""
         style={{ position: "absolute", bottom: 0, left: 0, width: "700px" }}
       />
+      <Stack position={"fixed"} top={20} left={20}>
+        <IoGlobe
+          fontSize={"1.5rem"}
+          style={{ color: "white", cursor: "pointer" }}
+          onClick={() => {
+            if (localStorage.getItem("i18nextLng")) {
+              if (i18n.language === "ar") {
+                i18n.changeLanguage("en");
+                localStorage.setItem("i18nextLng", "en");
+              } else {
+                i18n.changeLanguage("ar");
+                localStorage.setItem("i18nextLng", "ar");
+              }
+            } else {
+              i18n.changeLanguage("en");
+              localStorage.setItem("i18nextLng", "en");
+            }
+          }}
+        />
+      </Stack>
       <Stack
         zIndex={1}
         alignItems={"center"}

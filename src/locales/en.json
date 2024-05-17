@@ -1,3 +1,15 @@
 {
-  "hayyak": "Welcome to"
+  "home": {
+    "hayyak": "Welcome to",
+    "appName": "The BMI Project",
+    "offerYouService": "The best <strong>Body Mass Index calculator</strong> for any human being!",
+    "weDontAcceptAliens": "(We do not deal with extraterrestrial bodies)",
+    "fetchGraphql": "Search with GraphQL",
+    "fetchREST": "Search with REST",
+    "graphql": "GraphQL",
+    "rest": "REST",
+    "weight": "Weight",
+    "height": "Height",
+    "submit": "Calculate"
+  }
 }
