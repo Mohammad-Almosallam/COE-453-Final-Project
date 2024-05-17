@@ -1,0 +1,15 @@
+{
+  "home": {
+    "hayyak": "حياك الله في",
+    "appName": "مشروع الطحاطيح",
+    "offerYouService": "!افضل حاسبة <strong>لمؤشر كتلة الجسم</strong> عند اي مخلوق بشري",
+    "weDontAcceptAliens": "(لا نتعامل مع الاجسام الفضائية)",
+    "fetchGraphql": "ابحث مع چراف-قل",
+    "fetchREST": "ابحث مع ريست",
+    "graphql": "چراف-قل",
+    "rest": "ريست",
+    "weight": "الوزن",
+    "height": "الطول",
+    "submit": "احسب"
+  }
+}
