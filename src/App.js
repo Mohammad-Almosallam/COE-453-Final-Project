@@ -9,8 +9,6 @@ import { Trans, useTranslation } from "react-i18next";
 import Home from "./features/Home/pages/Home";
 
 function App() {
-  const [data, setData] = useState([]);
-  const { t } = useTranslation();
   const { i18n } = useTranslation();
   document.body.dir = i18n.dir();
 

@@ -13,54 +13,29 @@ import {
   TableHead,
   Table,
   TableContainer,
+  CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getBMIbyGraphQL } from "../../../apis/GraphQL";
+import { getBMIbyRest } from "../../../apis/REST";
 
 const DataBlock = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
-  const getBMIbyRest = () => {
-    fetch("https://restapi2-ji6zmiyasq-uc.a.run.app/getBMI")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch BMI data");
-        }
-        return response.json();
-      })
-      .then((jsonData) => {
-        setData(jsonData);
-      })
-      .catch((error) => {
-        console.error("Error fetching BMI data:", error);
-      });
-  };
-
-  const getBMIbyGraphQL = () => {
-    fetch("https://graphapi-ji6zmiyasq-uc.a.run.app/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: "{ getBMI }",
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch BMI data");
-        }
-        return response.json();
-      })
-      .then((jsonData) => {
-        const parsedData = JSON.parse(jsonData.data.getBMI);
-        setData(parsedData);
-      })
-      .catch((error) => {
-        console.error("Error fetching BMI data:", error);
-      });
+  const fetchData = async (fetchFunction) => {
+    setLoading(true);
+    try {
+      const data = await fetchFunction();
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -82,9 +57,7 @@ const DataBlock = () => {
           sx={{
             borderRadius: theme.borderRadius.r10,
           }}
-          onClick={() => {
-            getBMIbyGraphQL();
-          }}
+          onClick={() => fetchData(getBMIbyGraphQL)}
         >
           {t("home.fetchGraphql")}
         </Button>
@@ -93,12 +66,11 @@ const DataBlock = () => {
           sx={{
             borderRadius: theme.borderRadius.r10,
           }}
-          onClick={() => {
-            getBMIbyRest();
-          }}
+          onClick={() => fetchData(getBMIbyRest)}
         >
           {t("home.fetchREST")}
         </Button>
+        {isLoading && <CircularProgress size={20} />}
       </Stack>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="BMI data table">
@@ -113,13 +85,10 @@ const DataBlock = () => {
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={index}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.id}</TableCell>
+                <TableCell align="right">{index + 1}</TableCell>
                 <TableCell align="right">{row.height}</TableCell>
                 <TableCell align="right">{row.weight}</TableCell>
-                <TableCell align="right">{row.bmi}</TableCell>
+                <TableCell align="right">{row.bmi.toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

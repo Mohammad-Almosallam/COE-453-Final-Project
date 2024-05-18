@@ -9,9 +9,12 @@ import {
   Button,
   Snackbar,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { calculateBMIusingGraphQL } from "../../../apis/GraphQL";
+import { calculateBMIusingREST } from "../../../apis/REST";
 
 const Calculator = () => {
   const { t } = useTranslation();
@@ -22,9 +25,10 @@ const Calculator = () => {
     selectedOption: "graphql", // Default option
   });
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
-  const handleClick = () => {
+  const handleErrorMessage = () => {
     setOpen(true);
   };
 
@@ -51,65 +55,33 @@ const Calculator = () => {
     });
   };
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
     const { height, weight, selectedOption } = formData;
 
     // Validate inputs
     if (!height || !weight) {
-      handleClick();
-      // alert("Please fill in both height and weight fields.");
+      handleErrorMessage();
       return;
     }
 
-    // Determine endpoint and payload
-    if (selectedOption === "graphql") {
-      const query = `{
-        calculateBMI(weight: ${weight}, height: ${height})
-      }`;
+    setLoading(true);
 
-      fetch("https://graphapi-ji6zmiyasq-uc.a.run.app/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch BMI data");
-          }
-          return response.json();
-        })
-        .then((jsonData) => {
-          console.log("GraphQL Response:", jsonData);
-          // Handle the response data here
-        })
-        .catch((error) => {
-          console.error("Error fetching BMI data:", error);
-        });
-    } else if (selectedOption === "rest") {
-      const payload = { weight, height };
-
-      fetch("https://restapi2-ji6zmiyasq-uc.a.run.app/calculateBMI", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to fetch BMI data");
-          }
-          return response.json();
-        })
-        .then((jsonData) => {
-          console.log("REST Response:", jsonData);
-          // Handle the response data here
-        })
-        .catch((error) => {
-          console.error("Error fetching BMI data:", error);
-        });
+    try {
+      if (selectedOption === "graphql") {
+        const query = `{
+          calculateBMI(weight: ${weight}, height: ${height})
+        }`;
+        const data = await calculateBMIusingGraphQL(query);
+        console.log("GraphQL Response:", data);
+      } else if (selectedOption === "rest") {
+        const payload = { weight, height };
+        const data = await calculateBMIusingREST(payload);
+        console.log("REST Response:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching BMI data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -225,12 +197,10 @@ const Calculator = () => {
           sx={{
             borderRadius: theme.borderRadius.r10,
           }}
-          onClick={() => {
-            console.warn("hhh", formData);
-            handleSubmitForm();
-          }}
+          disabled={isLoading}
+          onClick={handleSubmitForm}
         >
-          {t("home.submit")}
+          {isLoading ? <CircularProgress size={20} /> : t("home.submit")}
         </Button>
       </Stack>
     </Stack>

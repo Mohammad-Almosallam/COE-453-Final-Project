@@ -15,9 +15,9 @@ const Home = () => {
   return (
     <Stack
       sx={{
-        height: "100vh",
         background: "linear-gradient(to top, #061D1B, #134E4A)",
         display: "flex",
+        minHeight: "100vh",
         justifyContent: "center",
         alignItems: "center",
         position: "relative",
@@ -35,7 +35,7 @@ const Home = () => {
         alt=""
         style={{ position: "absolute", bottom: 0, left: 0, width: "700px" }}
       />
-      <Stack position={"fixed"} top={20} left={20}>
+      <Stack position={"fixed"} top={20} left={20} zIndex={99}>
         <IoGlobe
           fontSize={"1.5rem"}
           style={{ color: "white", cursor: "pointer" }}
