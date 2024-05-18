@@ -17,7 +17,7 @@ export const getBMIbyRest = async () => {
 export const calculateBMIusingREST = async (payload) => {
   try {
     const response = await fetch(
-      "https://restapi2-ji6zmiyasq-uc.a.run.app/calculateBMI",
+      "https://restapiv3-ji6zmiyasq-uc.a.run.app/calculateBMI",
       {
         method: "POST",
         headers: {
