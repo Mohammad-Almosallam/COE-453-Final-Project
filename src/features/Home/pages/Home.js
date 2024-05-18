@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Grid, Stack, Typography } from "@mui/material";
 import gradientOne from "../../..//assets/gradient1.png";
 import gradientTwo from "../../..//assets/gradient2.png";
@@ -11,6 +11,21 @@ import i18n from "../../../i18n";
 
 const Home = () => {
   const { t } = useTranslation();
+
+  const [data, setData] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  const fetchData = async (fetchFunction) => {
+    setLoading(true);
+    try {
+      const data = await fetchFunction();
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Stack
@@ -80,10 +95,14 @@ const Home = () => {
         </Stack>
         <Grid container gap={1} maxWidth={{ xs: "100%", sm: "800px" }}>
           <Grid container item xs={12}>
-            <Calculator />
+            <Calculator fetchData={fetchData} />
           </Grid>
           <Grid container item>
-            <DataBlock />
+            <DataBlock
+              data={data}
+              isLoading={isLoading}
+              fetchData={fetchData}
+            />
           </Grid>
         </Grid>
       </Stack>

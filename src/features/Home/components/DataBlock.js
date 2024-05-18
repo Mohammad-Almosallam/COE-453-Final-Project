@@ -20,23 +20,9 @@ import { useTranslation } from "react-i18next";
 import { getBMIbyGraphQL } from "../../../apis/GraphQL";
 import { getBMIbyRest } from "../../../apis/REST";
 
-const DataBlock = () => {
+const DataBlock = ({ data, isLoading, fetchData }) => {
   const { t } = useTranslation();
   const theme = useTheme();
-  const [data, setData] = useState([]);
-  const [isLoading, setLoading] = useState(false);
-
-  const fetchData = async (fetchFunction) => {
-    setLoading(true);
-    try {
-      const data = await fetchFunction();
-      setData(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <Stack
@@ -72,7 +58,7 @@ const DataBlock = () => {
         </Button>
         {isLoading && <CircularProgress size={20} />}
       </Stack>
-      <TableContainer>
+      <TableContainer sx={{ maxHeight: "600px", overflow: "scroll" }}>
         <Table sx={{ minWidth: 650 }} aria-label="BMI data table">
           <TableHead>
             <TableRow>

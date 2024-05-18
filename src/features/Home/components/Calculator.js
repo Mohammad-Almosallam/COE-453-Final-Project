@@ -14,9 +14,9 @@ import {
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { calculateBMIusingGraphQL } from "../../../apis/GraphQL";
-import { calculateBMIusingREST } from "../../../apis/REST";
+import { calculateBMIusingREST, getBMIbyRest } from "../../../apis/REST";
 
-const Calculator = () => {
+const Calculator = ({ fetchData }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const [formData, setFormData] = useState({
@@ -78,6 +78,8 @@ const Calculator = () => {
         const data = await calculateBMIusingREST(payload);
         console.log("REST Response:", data);
       }
+
+      fetchData(getBMIbyRest);
     } catch (error) {
       console.error("Error fetching BMI data:", error);
     } finally {
