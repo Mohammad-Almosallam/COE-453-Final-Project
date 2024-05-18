@@ -1,3 +1,4 @@
+![CleanShot 2024-05-18 at 22 09 36@2x](https://github.com/Mohammad-Almosallam/COE-453-Final-Project/assets/94635823/86b29baf-b7bc-48d7-8a1d-4d7b9a66a677)
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -5,6 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Available Scripts
 
 In the project directory, you can run:
+
 
 ### `npm start`
 
